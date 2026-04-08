@@ -20,7 +20,7 @@ import Layout from '../components/Layout';
 import AdminLayout from '../components/layout/admin/Layout';
 import PublicLayout from '../components/layout/public/PublicLayout';
 import { ROUTES } from '../config';
-import { selectIsAuthenticated } from '../store/slices/authSlice';
+import { selectIsAuthenticated, selectUser } from '../store/slices/authSlice';
 
 // Derive a relative segment from an absolute admin route path
 const seg = (route) => route.replace(`${ROUTES.ADMIN}/`, '');
@@ -81,12 +81,27 @@ const NotFound = () => (
   </div>
 );
 
-const ProtectedRoute = ({ children }) => {
+const DEFAULT_ROLE_ROUTE = {
+  admin: ROUTES.ADMIN_DASHBOARD,
+  seller: ROUTES.SELLER_DASHBOARD,
+  user: ROUTES.USER_PROFILE,
+};
+
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
   const location = useLocation();
+
   if (!isAuthenticated) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
+
+  const userRole = user?.role;
+  if (allowedRoles?.length && !allowedRoles.includes(userRole)) {
+    const fallbackRoute = DEFAULT_ROLE_ROUTE[userRole] || ROUTES.HOME;
+    return <Navigate to={fallbackRoute} replace />;
+  }
+
   return children;
 };
 
@@ -218,7 +233,7 @@ const router = createBrowserRouter(
         path={ROUTES.SELLER}
         element={
           <Suspense fallback={<PageLoader />}>
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['seller']}>
               <AdminLayout />
             </ProtectedRoute>
           </Suspense>
@@ -237,7 +252,7 @@ const router = createBrowserRouter(
         path={ROUTES.USER}
         element={
           <Suspense fallback={<PageLoader />}>
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['user']}>
               <AdminLayout />
             </ProtectedRoute>
           </Suspense>
@@ -253,7 +268,7 @@ const router = createBrowserRouter(
         path={ROUTES.ADMIN}
         element={
           <Suspense fallback={<PageLoader />}>
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['admin']}>
               <AdminLayout />
             </ProtectedRoute>
           </Suspense>
