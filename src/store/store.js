@@ -13,8 +13,12 @@ const listener = createListenerMiddleware();
 listener.startListening({
   actionCreator: loginSuccess,
   effect: (action) => {
-    localStorage.setItem('token', action.payload.token);
-    localStorage.setItem('user', JSON.stringify(action.payload.user));
+    const payload = action?.payload;
+    if (!payload?.token || !payload?.user) {
+      return;
+    }
+    localStorage.setItem('token', payload.token);
+    localStorage.setItem('user', JSON.stringify(payload.user));
   },
 });
 
@@ -46,7 +50,7 @@ listener.startListening({
 listener.startListening({
   actionCreator: setTheme,
   effect: (action) => {
-    const mode = action.payload;
+    const mode = action?.payload || 'light';
     localStorage.setItem('theme', mode);
     document.documentElement.classList.toggle('dark', mode === 'dark');
   },

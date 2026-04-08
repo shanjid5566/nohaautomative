@@ -15,9 +15,10 @@ const authSlice = createSlice({
   initialState: loadAuthState(),
   reducers: {
     loginSuccess: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
+      const payload = action?.payload || {};
+      state.user = payload.user || null;
+      state.token = payload.token || null;
+      state.isAuthenticated = !!payload.token;
       state.loading = false;
     },
 
@@ -28,10 +29,13 @@ const authSlice = createSlice({
     },
 
     setLoading: (state, action) => {
-      state.loading = action.payload;
+      state.loading = !!action?.payload;
     },
 
     updateUser: (state, action) => {
+      if (!action?.payload || !state.user) {
+        return;
+      }
       state.user = { ...state.user, ...action.payload };
     },
   },
