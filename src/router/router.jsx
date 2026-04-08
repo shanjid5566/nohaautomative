@@ -18,6 +18,7 @@ const RootLayout = () => (
 import { useSelector } from 'react-redux';
 import Layout from '../components/Layout';
 import AdminLayout from '../components/layout/admin/Layout';
+import PublicLayout from '../components/layout/public/PublicLayout';
 import { ROUTES } from '../config';
 import { selectIsAuthenticated } from '../store/slices/authSlice';
 
@@ -92,77 +93,79 @@ const ProtectedRoute = ({ children }) => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
-      {/* Home has its own full-page layout (Figma design with custom navbar/footer) */}
-      <Route
-        path={ROUTES.HOME}
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <Home />
-          </Suspense>
-        }
-      />
+      <Route element={<PublicLayout />}>
+        {/* Home has its own full-page layout (Figma design with custom navbar/footer) */}
+        <Route
+          path={ROUTES.HOME}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Home />
+            </Suspense>
+          }
+        />
 
-      {/* Car List has its own full-page layout (same Figma design system) */}
-      <Route
-        path={ROUTES.CAR_LIST}
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <CarList />
-          </Suspense>
-        }
-      />
+        {/* Car List has its own full-page layout (same Figma design system) */}
+        <Route
+          path={ROUTES.CAR_LIST}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CarList />
+            </Suspense>
+          }
+        />
 
-      {/* Car Detail page */}
-      <Route
-        path={ROUTES.CAR_DETAIL}
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <CarDetail />
-          </Suspense>
-        }
-      />
+        {/* Car Detail page */}
+        <Route
+          path={ROUTES.CAR_DETAIL}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CarDetail />
+            </Suspense>
+          }
+        />
 
-      {/* Seller Profile page */}
-      <Route
-        path={ROUTES.SELLER_PROFILE}
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <SellerProfile />
-          </Suspense>
-        }
-      />
+        {/* Seller Profile page */}
+        <Route
+          path={ROUTES.SELLER_PROFILE}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <SellerProfile />
+            </Suspense>
+          }
+        />
 
-      {/* Seller Reviews page */}
-      <Route
-        path={ROUTES.SELLER_REVIEWS}
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <SellerReviews />
-          </Suspense>
-        }
-      />
+        {/* Seller Reviews page */}
+        <Route
+          path={ROUTES.SELLER_REVIEWS}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <SellerReviews />
+            </Suspense>
+          }
+        />
 
-      {/* Chat with Seller page */}
-      <Route
-        path={ROUTES.CHAT}
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <Chat />
-          </Suspense>
-        }
-      />
+        {/* Chat with Seller page */}
+        <Route
+          path={ROUTES.CHAT}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Chat />
+            </Suspense>
+          }
+        />
 
-      <Route
-        element={
-          <Suspense fallback={<PageLoader />}>
-            <Layout />
-          </Suspense>
-        }
-      >
-        <Route path={ROUTES.ABOUT} element={<About />} />
-        <Route path={ROUTES.SERVICES} element={<Services />} />
-        <Route path={ROUTES.CONTACT} element={<Contact />} />
-        <Route path={ROUTES.REDUX_DEMO} element={<ReduxDemo />} />
+        <Route
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Layout />
+            </Suspense>
+          }
+        >
+          <Route path={ROUTES.ABOUT} element={<About />} />
+          <Route path={ROUTES.SERVICES} element={<Services />} />
+          <Route path={ROUTES.CONTACT} element={<Contact />} />
+          <Route path={ROUTES.REDUX_DEMO} element={<ReduxDemo />} />
+        </Route>
       </Route>
 
       <Route
