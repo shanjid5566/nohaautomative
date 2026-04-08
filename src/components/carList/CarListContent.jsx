@@ -81,7 +81,7 @@ const CarListContent = () => {
       <Navbar />
 
       {/* -- Mobile filter drawer - portal, z-[55]/z-[60] above fixed navbar z-50 -- */}
-      {createPortal(
+      {isMobileFilterOpen && createPortal(
         <>
           {/* Backdrop */}
           <div
@@ -130,10 +130,14 @@ const CarListContent = () => {
         <section className='relative min-h-80 md:min-h-96 lg:min-h-105 flex items-center justify-center overflow-hidden'>
           {/* Background car photo */}
           <img
-            src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80'
+            src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1280&q=60&auto=format'
+            srcSet='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=640&q=55&auto=format 640w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=960&q=60&auto=format 960w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1280&q=60&auto=format 1280w'
+            sizes='100vw'
             alt=''
             aria-hidden='true'
             className='absolute inset-0 w-full h-full object-cover pointer-events-none'
+            decoding='async'
+            fetchPriority='high'
           />
           {/* Dark overlay */}
           <div className='absolute inset-0 bg-linear-to-b from-black/50 via-black/35 to-black/60 pointer-events-none' />

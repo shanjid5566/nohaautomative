@@ -64,11 +64,15 @@ const Hero = memo(() => {
     >
       {/* Background image */}
       <img
-        src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80'
+        src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1280&q=60&auto=format'
+        srcSet='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=640&q=55&auto=format 640w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=960&q=60&auto=format 960w, https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1280&q=60&auto=format 1280w'
+        sizes='100vw'
         alt=''
         aria-hidden='true'
         className='absolute inset-0 w-full h-full object-cover pointer-events-none'
         loading='eager'
+        decoding='async'
+        fetchPriority='high'
       />
       {/* Light overlay — keeps text readable while image stays vivid */}
       <div

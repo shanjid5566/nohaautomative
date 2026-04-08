@@ -1,5 +1,5 @@
 export const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1920&h=380&fit=crop&q=85';
+  'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1280&h=380&fit=crop&q=60&auto=format';
 
 export const AVATAR_IMAGE =
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&h=160&fit=crop&crop=faces&q=80';
