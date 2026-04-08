@@ -1,9 +1,11 @@
 ﻿import React, { memo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Star } from 'lucide-react';
+import { usePageLoadState } from '../../hooks/usePageLoadState';
 import Navbar from '../shared/Navbar';
 import Footer from '../shared/Footer';
 import CtaSection from '../shared/CtaSection';
+import PageStateView from '../shared/PageStateView';
 import { ROUTES } from '../../config';
 
 /* ── Static data ─────────────────────────────────────────── */
@@ -111,6 +113,7 @@ const ReviewRow = memo(({ review }) => (
 /* ── Main component ──────────────────────────────────────── */
 const SellerReviewsContent = memo(() => {
   const { id } = useParams();
+  const { isLoading, retry } = usePageLoadState();
   const [userRating, setUserRating] = useState(4);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
@@ -119,6 +122,7 @@ const SellerReviewsContent = memo(() => {
     ':id',
     id || 'ev-motors',
   );
+  const isEmpty = !isLoading && REVIEWS.length === 0;
 
   return (
     <>
@@ -135,8 +139,20 @@ const SellerReviewsContent = memo(() => {
             </Link>
           </div>
 
-          {/* ── Section 1: Feedback heading + summary ─── */}
-          <div className='flex flex-col gap-8.75'>
+          {(isLoading || isEmpty) && (
+            <PageStateView
+              status={isLoading ? 'loading' : 'empty'}
+              variant='detail'
+              onRetry={retry}
+              emptyTitle='No reviews yet'
+              emptyDescription='This seller has no customer reviews at this moment.'
+            />
+          )}
+
+          {!isLoading && !isEmpty && (
+            <>
+              {/* ── Section 1: Feedback heading + summary ─── */}
+              <div className='flex flex-col gap-8.75'>
             <p className='font-montserrat font-medium text-2xl text-black leading-normal'>
               Feedback
             </p>
@@ -269,7 +285,9 @@ const SellerReviewsContent = memo(() => {
                 Submit
               </button>
             </div>
-          </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* ── CTA ──────────────────────────────────────── */}

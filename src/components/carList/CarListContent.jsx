@@ -3,10 +3,12 @@ import { createPortal } from 'react-dom';
 import { useSearchParams } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal, X } from 'lucide-react';
 import { ALL_CARS } from '../../data/cars';
+import { usePageLoadState } from '../../hooks/usePageLoadState';
 import Navbar from '../shared/Navbar';
 import Footer from '../shared/Footer';
 import CarCard from '../shared/CarCard';
 import CtaSection from '../shared/CtaSection';
+import PageStateView from '../shared/PageStateView';
 import FilterSidebar from './components/FilterSidebar';
 import HeroSearchBar from './components/HeroSearchBar';
 import Pagination from './components/Pagination';
@@ -28,6 +30,7 @@ const CarListContent = () => {
   }));
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const { isLoading, retry } = usePageLoadState();
   const gridSectionRef = useRef(null);
 
   const handlePageChange = useCallback((page) => {
@@ -53,6 +56,25 @@ const CarListContent = () => {
 
   const pageStart = (currentPage - 1) * CARS_PER_PAGE;
   const visibleCars = ALL_CARS.slice(pageStart, pageStart + CARS_PER_PAGE);
+  const isEmpty = !isLoading && visibleCars.length === 0;
+
+  if (isLoading || isEmpty) {
+    return (
+      <div className='min-h-screen font-inter bg-[#f7f8fa]'>
+        <Navbar />
+        <main className='container mx-auto px-4 py-8'>
+          <PageStateView
+            status={isLoading ? 'loading' : 'empty'}
+            variant='list'
+            onRetry={retry}
+            emptyTitle='No cars available'
+            emptyDescription='No cars matched your current selection. Try again.'
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen font-inter bg-[#f7f8fa]'>
