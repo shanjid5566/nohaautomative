@@ -12,11 +12,7 @@ import PageStateView from '../shared/PageStateView';
 import FilterSidebar from './components/FilterSidebar';
 import HeroSearchBar from './components/HeroSearchBar';
 import Pagination from './components/Pagination';
-import {
-  CARS_PER_PAGE,
-  INITIAL_FILTERS,
-  TOTAL_PAGES,
-} from './components/constants';
+import { CARS_PER_PAGE, INITIAL_FILTERS } from './components/constants';
 
 const CarListContent = () => {
   const [searchParams] = useSearchParams();
@@ -29,6 +25,9 @@ const CarListContent = () => {
     priceRange: searchParams.get('price') || '',
   }));
   const [currentPage, setCurrentPage] = useState(1);
+  const [carsPerPage, setCarsPerPage] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : CARS_PER_PAGE,
+  );
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const { isLoading, retry } = usePageLoadState();
   const gridSectionRef = useRef(null);
@@ -54,9 +53,25 @@ const CarListContent = () => {
     };
   }, [isMobileFilterOpen]);
 
-  const pageStart = (currentPage - 1) * CARS_PER_PAGE;
-  const visibleCars = ALL_CARS.slice(pageStart, pageStart + CARS_PER_PAGE);
+  useEffect(() => {
+    const onResize = () => {
+      setCarsPerPage(window.innerWidth < 640 ? 6 : CARS_PER_PAGE);
+    };
+
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const pageStart = (currentPage - 1) * carsPerPage;
+  const visibleCars = ALL_CARS.slice(pageStart, pageStart + carsPerPage);
+  const totalPages = Math.max(1, Math.ceil(ALL_CARS.length / carsPerPage));
   const isEmpty = !isLoading && visibleCars.length === 0;
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   if (isLoading || isEmpty) {
     return (
@@ -236,7 +251,7 @@ const CarListContent = () => {
 
               <Pagination
                 currentPage={currentPage}
-                totalPages={TOTAL_PAGES}
+                totalPages={totalPages}
                 onPageChange={handlePageChange}
               />
             </div>
