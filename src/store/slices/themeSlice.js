@@ -21,7 +21,8 @@ const themeSlice = createSlice({
     },
 
     setTheme: (state, action) => {
-      state.mode = action.payload;
+      const nextMode = action?.payload;
+      state.mode = nextMode === 'dark' ? 'dark' : 'light';
     },
 
     setPrimaryColor: (state, action) => {

@@ -146,5 +146,3 @@ module.exports = (env, argv) => {
     devtool: isProd ? 'hidden-source-map' : 'eval-cheap-module-source-map',
   };
 };
- 
- 

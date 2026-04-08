@@ -2,10 +2,10 @@ node_modules
 dist
 
 # Environment files — contain secrets, never commit
-.env.development
-.env.production
-.env.local
-.env
 
 # Keep the template in git
 !.env.example
+temp_auto_push.bat
+temp_interactive_push.bat
+branch_structure.json
+config.bat
