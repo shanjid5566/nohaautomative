@@ -1,0 +1,56 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ── Typography ── */
+  --font-poppins: 'Poppins', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-public-sans: 'Public Sans', sans-serif;
+  --font-roboto: 'Roboto', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-manrope: 'Manrope', sans-serif;
+  --font-lato: 'Lato', sans-serif;
+
+  /* ── Brand palette ── */
+  --color-primary: #6c3bff; /* main brand purple */
+  --color-primary-dark: #5a2ee6; /* hover / pressed state */
+  --color-primary-light: #f0ebff; /* surface / input backgrounds */
+
+  /* ── Content palette ── */
+  --color-ink: #0c0c0c; /* headings & primary text */
+  --color-secondary: #373737; /* body / supporting text */
+  --color-dim: #42444a; /* labels, borders, muted text */
+  --color-subtle: #8c8c8c; /* placeholders & helper text */
+}
+
+/* Global typography defaults — components only override when they deviate */
+@layer base {
+  html,
+  body {
+    font-family: var(--font-public-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-poppins);
+  }
+}
+
+@keyframes nav-arrow {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+@layer utility {
+  .animate-nav-arrow {
+    animation: nav-arrow 1.2s ease-in-out infinite;
+  }
+}

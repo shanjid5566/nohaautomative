@@ -1,0 +1,11 @@
+node_modules
+dist
+
+# Environment files — contain secrets, never commit
+.env.development
+.env.production
+.env.local
+.env
+
+# Keep the template in git
+!.env.example
